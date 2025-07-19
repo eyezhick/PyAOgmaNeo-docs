@@ -29,9 +29,9 @@ Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo lib
 |:------:|---------|
 | ✅ | Complete (exists in this repository with full documentation) |
 | 🔄 | In Progress |
+| 📝 | Draft Available |
 | ⚠️ | Exists in PyAOgmaNeo (needs to be transferred and expanded) |
-| ⏳ | Planned |
-| ❌ | Blocked |
+| ⏳ | Not Started |
 
 ---
 
@@ -114,7 +114,7 @@ Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo lib
 
 ### Next Steps
 
-> More or a TODO list: will keep it updated
+> More of a TODO list: will keep it updated
 
 1. **Transfer existing content from PyAOgmaNeo:**
    - Installation guide
@@ -135,7 +135,7 @@ Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo lib
 
 ### Contributing
 
-Please see our [contributing guide](docs/contributing/guidelines.md) for details.
+Please see [contributing guide](docs/contributing/guidelines.md) for details.
 
 ---
 
