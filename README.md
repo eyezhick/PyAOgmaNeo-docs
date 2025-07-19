@@ -105,6 +105,8 @@ docs/
 
 ## Next Steps
 
+More or a TODO list: will keep it updated
+
 1. Transfer existing content from PyAOgmaNeo:
    - Installation guide
    - EnvRunner documentation
@@ -122,7 +124,7 @@ docs/
 
 ## Contributing
 
-We welcome contributions to the documentation! Please see our [contributing guide](docs/contributing/guidelines.md) for details.
+Please see our [contributing guide](docs/contributing/guidelines.md) for details.
 
 ## License
 
