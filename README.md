@@ -7,125 +7,83 @@
 
 This repository contains the comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo library.
 
-## Documentation Plan
+## Documentation Structure
 
-This is a living document that will incrementally be updated and track the progress of PyAOgmaNeo. Each section will be developed incrementally.
+```
+docs/
+├── getting_started/
+│   ├── installation.md         # Installation instructions
+│   ├── quickstart.md          # Quick introduction and first steps
+│   └── basic_concepts.md      # Essential concepts to get started
+│
+├── user_guide/
+│   ├── overview.md            # High-level overview of PyAOgmaNeo
+│   ├── core_concepts.md       # Detailed explanation of core concepts
+│   ├── env_runner.md         # Guide to using EnvRunner
+│   └── custom_environments.md # Creating custom environments
+│
+├── api_reference/
+│   ├── index.md              # API documentation overview
+│   ├── hierarchy.md          # Hierarchy class documentation
+│   ├── layer_desc.md         # LayerDesc class documentation
+│   └── io_desc.md           # IODesc class documentation
+│
+├── tutorials/
+│   ├── basic/
+│   │   ├── first_hierarchy.md     # Creating your first hierarchy
+│   │   └── simple_prediction.md   # Basic prediction example
+│   └── advanced/
+│       ├── custom_encoders.md     # Working with custom encoders
+│       └── optimization.md        # Performance optimization
+│
+├── examples/
+│   ├── cartpole/
+│   │   ├── manual_implementation.md
+│   │   └── env_runner_implementation.md
+│   ├── wave_prediction.md
+│   └── lunar_lander.md
+│
+└── contributing/
+    ├── guidelines.md         # Contribution guidelines
+    ├── development_setup.md  # Setting up development environment
+    └── documentation.md      # Documentation contribution guide
+```
 
-### Documentation Structure
+## Table of Contents
 
-- [ ] Project Organization
-  - [ ] Repository structure
-  - [ ] Code organization
-  - [ ] Build system
-  - [ ] Dependencies
+- [Getting Started](#getting-started)
+  - [Installation](docs/getting_started/installation.md)
+  - [Quickstart](docs/getting_started/quickstart.md)
+  - [Basic Concepts](docs/getting_started/basic_concepts.md)
+- [User Guide](#user-guide)
+  - [Overview](docs/user_guide/overview.md)
+  - [Core Concepts](docs/user_guide/core_concepts.md)
+  - [EnvRunner Guide](docs/user_guide/env_runner.md)
+  - [Custom Environments](docs/user_guide/custom_environments.md)
+- [API Reference](#api-reference)
+  - [Overview](docs/api_reference/index.md)
+  - [Hierarchy Class](docs/api_reference/hierarchy.md)
+  - [LayerDesc Class](docs/api_reference/layer_desc.md)
+  - [IODesc Class](docs/api_reference/io_desc.md)
+- [Tutorials](#tutorials)
+  - Basic
+    - [First Hierarchy](docs/tutorials/basic/first_hierarchy.md)
+    - [Simple Prediction](docs/tutorials/basic/simple_prediction.md)
+  - Advanced
+    - [Custom Encoders](docs/tutorials/advanced/custom_encoders.md)
+    - [Optimization](docs/tutorials/advanced/optimization.md)
+- [Examples](#examples)
+  - CartPole
+    - [Manual Implementation](docs/examples/cartpole/manual_implementation.md)
+    - [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md)
+  - [Wave Prediction](docs/examples/wave_prediction.md)
+  - [Lunar Lander](docs/examples/lunar_lander.md)
+- [Contributing](#contributing)
+  - [Guidelines](docs/contributing/guidelines.md)
+  - [Development Setup](docs/contributing/development_setup.md)
+  - [Documentation](docs/contributing/documentation.md)
 
-- [ ] Getting Started
-  - [ ] Installation guide (exists in PyAOgmaNeo, needs to be expanded here)
-  - [ ] Quick start guide
-  - [ ] First steps tutorial
-  - [ ] Common pitfalls
-  - [ ] Troubleshooting guide
-
-- [ ] Core Concepts
-  - [ ] Introduction to AOgmaNeo
-  - [ ] Hierarchical architecture
-  - [ ] Learning mechanisms
-  - [ ] Sparse Predictive Hierarchies (SPH)
-  - [ ] Key terminology
-
-- [ ] API Reference
-  - [ ] Module overview
-  - [ ] Class documentation
-    - [ ] Hierarchy
-    - [ ] LayerDesc
-    - [ ] IODesc
-    - [ ] ImageEncoder
-  - [ ] Function documentation
-  - [ ] Parameters and configurations
-  - [ ] Error handling
-
-- [ ] Tutorials
-  - [ ] Basic Usage
-    - [ ] Setting up a simple hierarchy
-    - [ ] Training process
-    - [ ] Prediction and inference
-  - [ ] EnvRunner
-    - [ ] Understanding EnvRunner (basic explanation exists in PyAOgmaNeo/examples)
-    - [ ] Automatic vs Manual setup
-    - [ ] Custom environment integration
-  - [ ] Advanced Topics
-    - [ ] Custom encoders
-    - [ ] Performance optimization
-    - [ ] Memory management
-
-- [ ] Examples
-  - [ ] CartPole (exists in PyAOgmaNeo, needs documentation here)
-    - [ ] Manual implementation
-    - [ ] EnvRunner implementation
-  - [ ] Wave line prediction (exists in PyAOgmaNeo, needs documentation here)
-  - [ ] LunarLander (exists in PyAOgmaNeo, needs documentation here)
-  - [ ] Image processing
-  - [ ] Custom environments
-  - [ ] Real-world applications
-
-- [ ] Best Practices
-  - [ ] Code style guide
-  - [ ] Performance tips
-  - [ ] Memory management
-  - [ ] Debugging strategies
-  - [ ] Testing guidelines
-
-- [ ] Integration Guides
-  - [ ] Gymnasium integration
-  - [ ] Custom environment creation
-  - [ ] Using with other ML frameworks
-  - [ ] Deployment considerations
-
-### Documentation Standards
-
-1. **Format**
-   - Clear, concise writing
-   - Consistent terminology
-   - Code examples for all concepts
-   - Step-by-step tutorials
-   - Diagrams where appropriate
-
-2. **Code Examples**
-   - Must be tested and working
-   - Include comments
-   - Follow PEP 8
-   - Include expected output
-   - Error handling examples
-
-3. **Organization**
-   - Logical progression
-   - Clear navigation
-   - Cross-references
-   - Search functionality
-   - Version specific content
-
-### Priority Tasks
-
-1. **High Priority**
-   - [ ] Transfer and expand existing documentation from PyAOgmaNeo
-   - [ ] Complete "Getting Started" section
-   - [ ] Basic API reference
-   - [ ] Core concepts documentation
-   - [ ] EnvRunner tutorial
-
-2. **Medium Priority**
-   - [ ] Advanced tutorials
-   - [ ] Integration guides
-   - [ ] Best practices
-   - [ ] Additional examples
-
-3. **Lower Priority**
-   - [ ] Performance optimization guide
-   - [ ] Advanced use cases
-   - [ ] Contributing guidelines
-   - [ ] Video tutorials
-
-### Progress Tracking
+## Progress Tracking
 
 - ✅ Complete (exists in this repository with full documentation)
 - 🔄 In Progress
@@ -135,23 +93,25 @@ This is a living document that will incrementally be updated and track the progr
 
 Current Status:
 - Getting Started: ⚠️ (Basic installation guide exists in PyAOgmaNeo)
-- Core Concepts: ⏳
+- User Guide: ⏳
 - API Reference: ⏳
 - Tutorials: ⚠️ (Basic EnvRunner explanation exists in PyAOgmaNeo)
 - Examples: ⚠️ (Code exists in PyAOgmaNeo, needs documentation)
-- Best Practices: ⏳
-- Integration Guides: ⏳
+- Contributing: ⏳
 
 ## Next Steps
 
-1. Create directory structure for documentation
+1. Create initial placeholder files for each document
 2. Transfer existing content from PyAOgmaNeo
-3. Expand and improve transferred content
-4. Begin work on new sections
+3. Begin with high-priority sections:
+   - Installation guide
+   - Quickstart guide
+   - Basic concepts
+   - EnvRunner documentation
 
 ## Contributing
 
-We welcome contributions to the documentation! Please see our [CONTRIBUTING.md](./CONTRIBUTING.md) file for guidelines.
+We welcome contributions to the documentation! Please see our [contributing guide](docs/contributing/guidelines.md) for details.
 
 ## License
 
