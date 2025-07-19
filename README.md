@@ -3,27 +3,20 @@
   Copyright(c) 2020-2025 Ogma Intelligent Systems Corp. All rights reserved.
 --->
 
-<div align="center">
-
 # PyAOgmaNeo Documentation
 
-Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo library.
-
+<div align="center">
+  <img src="assets/logo.png" alt="PyAOgmaNeo Logo" width="400"/>
+  <p><strong>Python bindings for the AOgmaNeo library</strong></p>
+  <p>
+    <a href="https://github.com/ogmacorp/AOgmaNeo">AOgmaNeo</a> •
+    <a href="docs/getting_started/installation.md">Installation</a> •
+    <a href="docs/getting_started/quickstart.md">Quickstart</a> •
+    <a href="docs/examples">Examples</a>
+  </p>
 </div>
 
----
-
-### Documentation Includes
-
-- **`API Reference`** &nbsp;&nbsp; Detailed documentation of classes, methods, and parameters
-- **`Tutorials`** &nbsp;&nbsp; Step-by-step guides from basic to advanced usage
-- **`Examples`** &nbsp;&nbsp; Real-world implementations and use cases
-- **`Implementation Guides`** &nbsp;&nbsp; Best practices and technical details
-- **`User Guides`** &nbsp;&nbsp; Conceptual overviews and usage patterns
-
----
-
-### Documentation Status
+## Documentation Status
 
 | Symbol | Meaning |
 |:------:|---------|
@@ -33,75 +26,102 @@ Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo lib
 | ⚠️ | Exists in PyAOgmaNeo (needs to be transferred and expanded) |
 | ⏳ | Not Started |
 
----
+## Quick Access
 
-### Contents
+| Task | Documentation |
+|------|--------------|
+| Quick start guide | [Quickstart Guide](docs/getting_started/quickstart.md) |
+| Learn fundamentals | [Basic Concepts](docs/getting_started/basic_concepts.md) |
+| Browse examples | [Examples](docs/examples) |
+| Understand internals | [Core Concepts](docs/user_guide/core_concepts.md) |
+| Follow tutorials | [Tutorials](docs/tutorials/basic/first_hierarchy.md) |
+| API documentation | [API Reference](docs/api_reference/index.md) |
+| Contribute code | [Contributing Guide](docs/contributing/guidelines.md) |
+
+## Documentation Overview
+
+This documentation is organized into several sections to help you find what you need:
+
+### Learning Path
 
 <details open>
-<summary><b>Getting Started</b> ⚠️</summary>
+<summary><b>Getting Started</b></summary>
 
-- [Installation](docs/getting_started/installation.md) ⚠️ _(Basic guide exists in PyAOgmaNeo)_
+- [Installation](docs/getting_started/installation.md) ⚠️
 - [Quickstart](docs/getting_started/quickstart.md) ⏳
 - [Basic Concepts](docs/getting_started/basic_concepts.md) ⏳
 </details>
 
 <details open>
-<summary><b>User Guide</b> ⏳</summary>
+<summary><b>User Guide</b></summary>
 
 - [Overview](docs/user_guide/overview.md) ⏳
 - [Core Concepts](docs/user_guide/core_concepts.md) ⏳
-- [EnvRunner Guide](docs/user_guide/env_runner.md) ⚠️ _(Basic explanation exists in PyAOgmaNeo)_
+- [EnvRunner Guide](docs/user_guide/env_runner.md) ⚠️
 - [Custom Environments](docs/user_guide/custom_environments.md) ⏳
 </details>
 
 <details open>
-<summary><b>Technical Guide</b> 🔄</summary>
+<summary><b>Tutorials</b></summary>
 
-- [Parameter Tuning](docs/technical_guide/parameter_tuning.md) 🔄 _(Transferred from AOgmaNeo)_
+- **Basic**
+  - [First Hierarchy](docs/tutorials/basic/first_hierarchy.md) ⏳
+  - [Simple Prediction](docs/tutorials/basic/simple_prediction.md) ⏳
+- **Advanced**
+  - [Custom Encoders](docs/tutorials/advanced/custom_encoders.md) ⏳
+  - [Optimization](docs/tutorials/advanced/optimization.md) ⏳
 </details>
 
-<details open>
-<summary><b>API Reference</b> ⏳</summary>
+### Reference Material
+
+<details>
+<summary><b>Technical Documentation</b></summary>
+
+- [Parameter Tuning](docs/technical_guide/parameter_tuning.md) 🔄
+- [Core Concepts](docs/technical_guide/core_concepts.md) ⏳
+  - CSDR Format
+  - Core Data Structures
+- [Advanced Topics](docs/technical_guide/advanced_topics.md) ⏳
+</details>
+
+<details>
+<summary><b>API Reference</b></summary>
 
 - [Overview](docs/api_reference/index.md) ⏳
 - [Hierarchy Class](docs/api_reference/hierarchy.md) ⏳
+  - Core Methods
+  - Serialization Methods
+  - State Management
+  - Prediction Methods
+  - Reconstruction Methods
 - [LayerDesc Class](docs/api_reference/layer_desc.md) ⏳
 - [IODesc Class](docs/api_reference/io_desc.md) ⏳
 </details>
 
-<details open>
-<summary><b>Tutorials</b> 🔄</summary>
+### Examples and Use Cases
 
-**Basic**
-- [First Hierarchy](docs/tutorials/basic/first_hierarchy.md) ⏳
-- [Simple Prediction](docs/tutorials/basic/simple_prediction.md) ⏳
+<details>
+<summary><b>View all examples</b></summary>
 
-**Advanced**
-- [Custom Encoders](docs/tutorials/advanced/custom_encoders.md) ⏳
-- [Optimization](docs/tutorials/advanced/optimization.md) ⏳
+- **CartPole**
+  - [Manual Implementation](docs/examples/cartpole/manual_implementation.md) ⚠️
+  - [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md) ⚠️
+- **Natural Language Processing**
+  - [Text Prediction](docs/examples/nlp/text_prediction.md) ⏳
+- **Other Examples**
+  - [Wave Prediction](docs/examples/wave_prediction.md) ⚠️
+  - [Lunar Lander](docs/examples/lunar_lander.md) ⚠️
 </details>
 
-<details open>
-<summary><b>Examples</b> ⚠️</summary>
+### Additional Resources
 
-**CartPole** _(exists in PyAOgmaNeo)_
-- [Manual Implementation](docs/examples/cartpole/manual_implementation.md) ⚠️
-- [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md) ⚠️
+<details>
+<summary><b>View all resources</b></summary>
 
-**Natural Language Processing**
-- [Text Prediction](docs/examples/nlp/text_prediction.md) ⏳
-
-**Other Examples**
-- [Wave Prediction](docs/examples/wave_prediction.md) ⚠️
-- [Lunar Lander](docs/examples/lunar_lander.md) ⚠️
-</details>
-
-<details open>
-<summary><b>Contributing</b> 🔄</summary>
-
-- [Guidelines](docs/contributing/guidelines.md) ✅
+- [Contributing Guidelines](docs/contributing/guidelines.md) ✅
 - [Development Setup](docs/contributing/development_setup.md) ⏳
-- [Documentation](docs/contributing/documentation.md) ⏳
+- [Documentation Guide](docs/contributing/documentation.md) ⏳
+- [Naming Reference](docs/appendix/naming_reference.md) 🔄
 </details>
 
 <details open>
@@ -131,18 +151,10 @@ Comprehensive documentation for PyAOgmaNeo, Python bindings for the AOgmaNeo lib
    - Text prediction example
    - Additional use cases
 
----
-
-### Contributing
-
-Please see [contributing guide](docs/contributing/guidelines.md) for details.
-
----
-
-### Repository Structure
+## Repository Structure
 
 <details>
-<summary>Click to expand full directory structure</summary>
+<summary>View complete documentation structure</summary>
 
 ```
 docs/
@@ -193,9 +205,7 @@ docs/
 ```
 </details>
 
----
-
-### License
+## License
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
 
