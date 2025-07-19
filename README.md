@@ -40,6 +40,8 @@ docs/
 │   ├── cartpole/
 │   │   ├── manual_implementation.md
 │   │   └── env_runner_implementation.md
+│   ├── nlp/
+│   │   └── text_prediction.md    # Text prediction example
 │   ├── wave_prediction.md
 │   └── lunar_lander.md
 │
@@ -76,6 +78,8 @@ docs/
   - CartPole
     - [Manual Implementation](docs/examples/cartpole/manual_implementation.md)
     - [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md)
+  - Natural Language Processing
+    - [Text Prediction](docs/examples/nlp/text_prediction.md)
   - [Wave Prediction](docs/examples/wave_prediction.md)
   - [Lunar Lander](docs/examples/lunar_lander.md)
 - [Contributing](#contributing)
