@@ -29,6 +29,9 @@ docs/
 │   ├── env_runner.md         # Guide to using EnvRunner
 │   └── custom_environments.md # Creating custom environments
 │
+├── technical_guide/
+│   └── parameter_tuning.md    # Comprehensive parameter tuning guide
+│
 ├── api_reference/
 │   ├── index.md              # API documentation overview
 │   ├── hierarchy.md          # Hierarchy class documentation
@@ -52,6 +55,9 @@ docs/
 │   ├── wave_prediction.md
 │   └── lunar_lander.md
 │
+├── appendix/
+│   └── naming_reference.md    # Variable naming conventions and reference
+│
 └── contributing/
     ├── guidelines.md         # Contribution guidelines
     ├── development_setup.md  # Setting up development environment
@@ -70,6 +76,9 @@ docs/
 - [Core Concepts](docs/user_guide/core_concepts.md) ⏳
 - [EnvRunner Guide](docs/user_guide/env_runner.md) ⚠️ (Basic explanation exists in PyAOgmaNeo)
 - [Custom Environments](docs/user_guide/custom_environments.md) ⏳
+
+### Technical Guide 🔄
+- [Parameter Tuning](docs/technical_guide/parameter_tuning.md) 🔄 (Transferred from AOgmaNeo)
 
 ### API Reference ⏳
 - [Overview](docs/api_reference/index.md) ⏳
@@ -103,6 +112,9 @@ docs/
 - [Development Setup](docs/contributing/development_setup.md) ⏳
 - [Documentation](docs/contributing/documentation.md) ⏳
 
+### Appendix 🔄
+- [Naming Reference](docs/appendix/naming_reference.md) 🔄 (Transferred from AOgmaNeo)
+
 ## Next Steps
 
 More or a TODO list: will keep it updated
@@ -111,7 +123,7 @@ More or a TODO list: will keep it updated
    - Installation guide
    - EnvRunner documentation
    - Example code and explanations
-   
+    
 2. Begin with high-priority sections:
    - Complete quickstart guide
    - Basic concepts documentation
