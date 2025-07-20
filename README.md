@@ -9,6 +9,7 @@
   <img src="assets/logo.png" alt="PyAOgmaNeo Logo" width="400"/>
   <p><strong>Python bindings for the AOgmaNeo library</strong></p>
   <p>
+    <a href="https://github.com/ogmacorp/PyAOgmaNeo">PyAOgmaNeo</a> •
     <a href="https://github.com/ogmacorp/AOgmaNeo">AOgmaNeo</a> •
     <a href="docs/getting_started/installation.md">Installation</a> •
     <a href="docs/getting_started/quickstart.md">Quickstart</a> •
