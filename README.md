@@ -152,7 +152,7 @@ This documentation is organized into several sections to help you find what you 
    - Text prediction example
    - Additional use cases
 
-## Repository Structure
+## Documentation Repository Structure
 
 <details open>
 <summary>View complete documentation structure</summary>
