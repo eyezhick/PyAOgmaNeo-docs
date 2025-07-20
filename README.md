@@ -46,7 +46,7 @@ This documentation is organized into several sections to help you find what you 
 ### Learning Path
 
 <details open>
-<summary><b>Getting Started</b></summary>
+<summary><b>Getting Started</b> ⚠️</summary>
 
 - [Installation](docs/getting_started/installation.md) ⚠️
 - [Quickstart](docs/getting_started/quickstart.md) ⏳
@@ -54,7 +54,7 @@ This documentation is organized into several sections to help you find what you 
 </details>
 
 <details open>
-<summary><b>User Guide</b></summary>
+<summary><b>User Guide</b> ⏳</summary>
 
 - [Overview](docs/user_guide/overview.md) ⏳
 - [Core Concepts](docs/user_guide/core_concepts.md) ⏳
@@ -63,20 +63,20 @@ This documentation is organized into several sections to help you find what you 
 </details>
 
 <details open>
-<summary><b>Tutorials</b></summary>
+<summary><b>Tutorials</b> ⏳</summary>
 
-- **Basic**
+- **Basic** ⏳
   - [First Hierarchy](docs/tutorials/basic/first_hierarchy.md) ⏳
   - [Simple Prediction](docs/tutorials/basic/simple_prediction.md) ⏳
-- **Advanced**
+- **Advanced** ⏳
   - [Custom Encoders](docs/tutorials/advanced/custom_encoders.md) ⏳
   - [Optimization](docs/tutorials/advanced/optimization.md) ⏳
 </details>
 
 ### Reference Material
 
-<details>
-<summary><b>Technical Documentation</b></summary>
+<details open>
+<summary><b>Technical Documentation</b> 🔄</summary>
 
 - [Parameter Tuning](docs/technical_guide/parameter_tuning.md) 🔄
 - [Core Concepts](docs/technical_guide/core_concepts.md) ⏳
@@ -85,8 +85,8 @@ This documentation is organized into several sections to help you find what you 
 - [Advanced Topics](docs/technical_guide/advanced_topics.md) ⏳
 </details>
 
-<details>
-<summary><b>API Reference</b></summary>
+<details open>
+<summary><b>API Reference</b> ⏳</summary>
 
 - [Overview](docs/api_reference/index.md) ⏳
 - [Hierarchy Class](docs/api_reference/hierarchy.md) ⏳
@@ -101,23 +101,23 @@ This documentation is organized into several sections to help you find what you 
 
 ### Examples and Use Cases
 
-<details>
-<summary><b>View all examples</b></summary>
+<details open>
+<summary><b>View all examples</b> ⚠️</summary>
 
-- **CartPole**
+- **CartPole** ⚠️
   - [Manual Implementation](docs/examples/cartpole/manual_implementation.md) ⚠️
   - [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md) ⚠️
-- **Natural Language Processing**
+- **Natural Language Processing** ⏳
   - [Text Prediction](docs/examples/nlp/text_prediction.md) ⏳
-- **Other Examples**
+- **Other Examples** ⚠️
   - [Wave Prediction](docs/examples/wave_prediction.md) ⚠️
   - [Lunar Lander](docs/examples/lunar_lander.md) ⚠️
 </details>
 
 ### Additional Resources
 
-<details>
-<summary><b>View all resources</b></summary>
+<details open>
+<summary><b>View all resources</b> 🔄</summary>
 
 - [Contributing Guidelines](docs/contributing/guidelines.md) ✅
 - [Development Setup](docs/contributing/development_setup.md) ⏳
@@ -154,7 +154,7 @@ This documentation is organized into several sections to help you find what you 
 
 ## Repository Structure
 
-<details>
+<details open>
 <summary>View complete documentation structure</summary>
 
 ```
