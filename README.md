@@ -39,6 +39,13 @@
 | API documentation | [API Reference](docs/api_reference/index.md) |
 | Contribute code | [Contributing Guide](docs/contributing/guidelines.md) |
 
+## Latest Documentation Updates
+
+| Date | Section | Description |
+|------|---------|-------------|
+| 07-19-2025 | [Installation](docs/getting_started/installation.md) | Added installation guide ⚠️ |
+| 07-18-2025 | [Documentation Structure](docs) | Set documentation structure with organized sections and navigation |
+
 ## Documentation Overview
 
 This documentation is organized into several sections to help you find what you need:
