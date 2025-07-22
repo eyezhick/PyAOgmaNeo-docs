@@ -43,8 +43,9 @@
 
 | Date | Section | Description |
 |------|---------|-------------|
-| 07-19-2025 | [Installation](docs/getting_started/installation.md) | Added installation guide ⚠️ |
-| 07-18-2025 | [Documentation Structure](docs) | Set documentation structure with organized sections and navigation |
+| 2025-07-22 | [Fashion MNIST Classification](docs/examples/fashion_mnist/fashion_mnist.md) | Added complete example of classification ✅ |
+| 2025-07-19 | [Installation](docs/getting_started/installation.md) | Added installation guide with platform-specific instructions ⚠️ |
+| 2025-07-18 | [Documentation Structure](docs) | Set documentation structure with organized sections and navigation |
 
 ## Documentation Overview
 
@@ -116,6 +117,8 @@ This documentation is organized into several sections to help you find what you 
   - [EnvRunner Implementation](docs/examples/cartpole/env_runner_implementation.md) ⚠️
 - **Natural Language Processing** ⏳
   - [Text Prediction](docs/examples/nlp/text_prediction.md) ⏳
+- **Classification** ✅
+  - [Fashion MNIST Classification](docs/examples/fashion_mnist/fashion_mnist.md) ✅
 - **Other Examples** ⚠️
   - [Wave Prediction](docs/examples/wave_prediction.md) ⚠️
   - [Lunar Lander](docs/examples/lunar_lander.md) ⚠️
@@ -198,6 +201,9 @@ docs/
 │   ├── cartpole/
 │   │   ├── manual_implementation.md
 │   │   └── env_runner_implementation.md
+│   ├── fashion_mnist/
+│   │   ├── fashion_mnist.md       # Fashion MNIST classification guide
+│   │   └── fashion_mnist_tutorial.ipynb  # Example implementation
 │   ├── nlp/
 │   │   └── text_prediction.md    # Text prediction example
 │   ├── wave_prediction.md
