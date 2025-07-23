@@ -43,9 +43,11 @@
 
 | Date | Section | Description |
 |------|---------|-------------|
+| 2025-07-23 | [API Reference](docs/api_reference/index.md) | Complete API documentation with verified methods and examples ✅ |
+| 2025-07-23 | [Layer Configuration](docs/api_reference/layer_config.md) | Comprehensive layer configuration guide with parameter validation ✅ |
+| 2025-07-23 | [State Management](docs/api_reference/state_management.md) | Detailed state management documentation with verified examples ✅ |
+| 2025-07-23 | [Image Processing](docs/api_reference/image_encoder.md) | Complete ImageEncoder documentation with usage patterns ✅ |
 | 2025-07-22 | [Fashion MNIST Classification](docs/examples/fashion_mnist/fashion_mnist.md) | Added complete example of classification ✅ |
-| 2025-07-19 | [Installation](docs/getting_started/installation.md) | Added installation guide with platform-specific instructions ⚠️ |
-| 2025-07-18 | [Documentation Structure](docs) | Set documentation structure with organized sections and navigation |
 
 ## Documentation Overview
 
@@ -177,17 +179,19 @@ docs/
 ├── user_guide/
 │   ├── overview.md            # High-level overview of PyAOgmaNeo
 │   ├── core_concepts.md       # Detailed explanation of core concepts
-│   ├── env_runner.md         # Guide to using EnvRunner
+│   ├── env_runner.md          # Guide to using EnvRunner
 │   └── custom_environments.md # Creating custom environments
 │
 ├── technical_guide/
-│   └── parameter_tuning.md    # Comprehensive parameter tuning guide
+│   ├── parameter_tuning.md    # Comprehensive parameter tuning guide
+│   └── core_concepts.md       # Technical details of SPH architecture
 │
 ├── api_reference/
-│   ├── index.md              # API documentation overview
-│   ├── hierarchy.md          # Hierarchy class documentation
-│   ├── layer_desc.md         # LayerDesc class documentation
-│   └── io_desc.md           # IODesc class documentation
+│   ├── index.md               # API documentation overview
+│   ├── hierarchy.md           # Hierarchy class reference
+│   ├── layer_config.md        # Layer configuration reference
+│   ├── state_management.md    # State management guide
+│   └── image_encoder.md       # Image processing reference
 │
 ├── tutorials/
 │   ├── basic/
