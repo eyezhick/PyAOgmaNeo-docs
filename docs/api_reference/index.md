@@ -1,11 +1,9 @@
 # PyAOgmaNeo API Reference
 
-PyAOgmaNeo is a Python binding for AOgmaNeo (Adaptive Ogma Neo), a library implementing Sparse Predictive Hierarchies (SPH). SPH is a novel machine learning architecture that combines hierarchical processing with sparse coding and temporal prediction to create adaptive, general-purpose learning systems.
-
-## Overview
+PyAOgmaNeo is a Python binding for AOgmaNeo (Adaptive Ogma Neo), a library implementing Sparse Predictive Hierarchies (SPH). SPH is a neuromorphic machine learning architecture that combines hierarchical processing with sparse coding and temporal prediction, inspired by the structure and function of biological neural networks. It creates adaptive, general-purpose learning systems that process information efficiently.
 
 ### Key Features
-- Hierarchical sparse predictive coding
+- Neuromorphic hierarchical sparse predictive coding
 - Online learning with no separate training phase
 - Temporal sequence prediction and learning
 - Reinforcement learning capabilities
@@ -57,7 +55,7 @@ Specialized components for image processing:
 - Visual processing patterns
 
 ### [State Management](state_management.md)
-Comprehensive guide to managing model state:
+Guide to managing model state:
 - State operations
 - Persistence patterns
 - Runtime management
@@ -107,3 +105,4 @@ Detailed parameter documentation:
 - [Tutorial](../getting_started/tutorial.md)
 - [FAQ](../getting_started/faq.md)
 - [Contributing](../development/contributing.md)
+
