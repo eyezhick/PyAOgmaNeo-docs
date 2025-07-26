@@ -60,6 +60,35 @@ sampled = h.sample_prediction(layer_idx, temperature=1.0)
 hidden_preds = h.get_layer_prediction_cis(layer_idx)
 ```
 
+#### Understanding get_prediction_cis Return Value
+
+`get_prediction_cis(layer_idx)` returns a list containing one numpy array with the predictions for the specified IO layer. The layer_idx parameter refers to the index of the IO layer (not counting hidden layers). For example:
+
+```python
+# For a hierarchy with multiple IO layers:
+h = neo.Hierarchy([
+    neo.IODesc((28, 28, 4), io_type=neo.none),       # IO layer 0
+    neo.IODesc((1, 1, 10), io_type=neo.prediction)   # IO layer 1
+], [
+    neo.LayerDesc((16, 16, 64))                      # Hidden layer (not counted in IO indexing)
+])
+
+# Get predictions from the second IO layer (index 1)
+predictions = h.get_prediction_cis(1)[0]  # [0] gets the first and only prediction array
+
+# For a hierarchy with a single IO layer:
+h = neo.Hierarchy([
+    neo.IODesc((1, 1, num_words), io_type=neo.prediction)  # IO layer 0
+], [
+    neo.LayerDesc(hidden_size)                             # Hidden layer
+])
+
+# Get predictions from the only IO layer (index 0)
+predictions = h.get_prediction_cis(0)[0]  # [0] gets the first and only prediction array
+```
+
+The `[0]` indexing is always needed because the method returns a list containing one prediction array, regardless of how many IO layers the hierarchy has.
+
 ### State Access
 
 ```python
@@ -115,7 +144,7 @@ for epoch in range(num_epochs):
     for img, label in dataset:
         # Process image
         h.step([preprocess(img), prev_label], True)
-        prediction = h.get_prediction_cis(1)[0]
+        prediction = h.get_prediction_cis(1)[0]  # Get prediction from second IO layer
         prev_label = label
 ```
 
@@ -134,6 +163,7 @@ for sequence in sequences:
     h.clear_state()  # Reset for new sequence
     for item in sequence:
         h.step([item], True)
+        prediction = h.get_prediction_cis(0)[0]  # Get prediction from only IO layer
 ```
 
 ### Reinforcement Learning
@@ -150,7 +180,7 @@ h = neo.Hierarchy([
 # Training loop
 while training:
     state = env.get_state()
-    action = h.get_prediction_cis(1)[0]
+    action = h.get_prediction_cis(1)[0]  # Get prediction from second IO layer
     reward = env.step(action)
     h.step([state], True, reward=reward)
 ```
