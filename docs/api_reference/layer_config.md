@@ -39,56 +39,129 @@ def __init__(self,
 
 ```python
 class IOType:
-    none = 0        # Regular input layer
-    prediction = 1  # Layer that makes predictions
-    action = 2      # Layer that generates actions
+    none = 0        # Input-only layer
+    prediction = 1  # Prediction layer
+    action = 2      # Action layer for RL
 ```
+
+IO layers can function in two configurations:
+
+**Single Layer Configuration**: The layer serves as both input and output, enabling autoregressive learning for sequence modeling tasks.
+
+**Multi-Layer Configuration**: Separate layers handle input and output, providing clear separation for classification and encoder-decoder architectures.
+
+#### Layer Type Behaviors
+
+| Type | Single Layer | Multi-Layer | Methods Available | Primary Use Cases |
+|------|-------------|-------------|-------------------|-------------------|
+| `none` | Not supported* | Input only | None | Raw data input (images, sensors) |
+| `prediction` | Input + Output | Output only | `get_prediction_cis()`, `get_prediction_acts()` | Sequence prediction, classification |
+| `action` | Input + Output | Output only | `get_prediction_cis()` (with exploration) | Reinforcement learning |
+
+*`none` layers cannot exist alone as they provide no output mechanism.
 
 ### Example Configurations
 
-1. **Input Layer**
-```python
-# Regular input (e.g., sensor data)
-input_desc = neo.IODesc(
-    size=(10, 10, 16),
-    io_type=neo.none,
-    up_radius=4  # Larger radius for feature detection
-)
+#### Single Layer Examples
 
-# Image input
-image_input = neo.IODesc(
-    size=(28, 28, 4),  # Image dimensions with quantization
-    io_type=neo.none,
-    up_radius=8  # Large field for spatial patterns
-)
+**1. Sequence Prediction (Single `prediction` layer)**
+```python
+# Word/character prediction - layer does both input and output
+h = neo.Hierarchy([
+    neo.IODesc((1, 1, vocab_size), 
+              io_type=neo.prediction,
+              history_capacity=1024)  # Large history for sequences
+], [hidden_layers])
+
+# Usage pattern:
+for item in sequence:
+    prediction = h.get_prediction_cis(0)[0]  # What's next?
+    h.step([[item]], learn_enabled=True)     # Here's what actually came next
 ```
 
-2. **Prediction Layer**
+**2. Time Series Prediction**
 ```python
-# Sequence prediction
-pred_desc = neo.IODesc(
-    size=(1, 1, vocab_size),
-    io_type=neo.prediction,
-    num_dendrites_per_cell=8,  # More connections for complex patterns
-    history_capacity=1024  # Larger history for long sequences
-)
-
-# Classification output
-class_desc = neo.IODesc(
-    size=(1, 1, num_classes),
-    io_type=neo.prediction,
-    num_dendrites_per_cell=64  # Many dendrites for robust classification
-)
+# Single layer predicts next value in series
+h = neo.Hierarchy([
+    neo.IODesc((1, 1, num_features),
+              io_type=neo.prediction,
+              num_dendrites_per_cell=8)
+], [hidden_layers])
 ```
 
-3. **Action Layer**
+#### Multi-Layer Examples
+
+**1. Classification (Input + Output layers)**
 ```python
-# Discrete actions
-action_desc = neo.IODesc(
-    size=(1, 1, num_actions),
-    io_type=neo.action,
-    value_num_dendrites_per_cell=16  
-)
+h = neo.Hierarchy([
+    # Input layer - receives images/data
+    neo.IODesc((28, 28, 4),
+              io_type=neo.none,      # Input only
+              up_radius=8),
+    
+    # Output layer - makes classifications  
+    neo.IODesc((1, 1, 10),
+              io_type=neo.prediction, # Output only
+              num_dendrites_per_cell=64)
+], [hidden_layers])
+
+# Usage:
+h.step([image_data, prev_label], learn_enabled=True)
+prediction = h.get_prediction_cis(1)[0]  # From output layer
+```
+
+**2. Reinforcement Learning (State + Action layers)**
+```python
+h = neo.Hierarchy([
+    # State input layer
+    neo.IODesc((8, 8, 16), 
+              io_type=neo.none),     # Input only
+    
+    # Action output layer
+    neo.IODesc((1, 1, num_actions), 
+              io_type=neo.action,    # Output with RL features
+              value_num_dendrites_per_cell=16)
+], [hidden_layers])
+
+# Usage:
+h.step([state, prev_action], learn_enabled=True, reward=reward)
+action = h.get_prediction_cis(1)[0]  # From action layer
+```
+
+**3. Mixed Input Types**
+```python
+h = neo.Hierarchy([
+    # Image input
+    neo.IODesc((32, 32, 4), io_type=neo.none),
+    
+    # Text input  
+    neo.IODesc((1, 1, vocab_size), io_type=neo.none),
+    
+    # Combined prediction output
+    neo.IODesc((1, 1, num_classes), io_type=neo.prediction)
+], [hidden_layers])
+```
+
+#### Advanced Examples
+
+**1. Multi-Modal Prediction**
+```python
+# Multiple inputs, single predictive output
+h = neo.Hierarchy([
+    neo.IODesc((16, 16, 8), io_type=neo.none),        # Visual input
+    neo.IODesc((1, 1, 100), io_type=neo.none),        # Text input  
+    neo.IODesc((1, 1, action_space), io_type=neo.action)  # Action output
+], [hidden_layers])
+```
+
+**2. Hierarchical RL**
+```python
+# High-level and low-level actions
+h = neo.Hierarchy([
+    neo.IODesc((8, 8, 16), io_type=neo.none),         # State
+    neo.IODesc((1, 1, high_actions), io_type=neo.action),  # High-level actions
+    neo.IODesc((1, 1, low_actions), io_type=neo.action)    # Low-level actions
+], [hidden_layers])
 ```
 
 ## LayerDesc (Hidden Layer Descriptor)
@@ -135,7 +208,35 @@ temporal_desc = neo.LayerDesc(
 )
 ```
 
+## Configuration Guidelines
+
+### Choosing Single vs Multi-Layer
+
+**Use Single Layer When:**
+- Sequence modeling (language, time series)
+- Autoregressive tasks (predict next in sequence)
+- Self-supervised learning
+- Simple RL with action history
+
+**Use Multi-Layer When:**
+- Classification tasks
+- Encoder-decoder architectures  
+- Complex RL (separate state and action spaces)
+- Multi-modal inputs
+- Clear input/output separation needed
+
+### Common Patterns
+
+| Task Type | Configuration | Example |
+|-----------|---------------|---------|
+| Language Modeling | Single `prediction` | Word/character prediction |
+| Image Classification | `none` + `prediction` | MNIST, CIFAR |
+| Reinforcement Learning | `none` + `action` | CartPole, Atari |
+| Time Series | Single `prediction` | Stock prices, sensor data |
+| Translation | `none` + `prediction` | Seq2seq tasks |
+
 ## See Also
 
-- [Hierarchy Class](hierarchy.md)
-- [Image Processing](image_encoder.md) 
+- [Hierarchy Class](hierarchy.md) - Using configured layers
+- [State Management](state_management.md) - Managing layer states
+- [Image Processing](image_encoder.md) - Specialized image handling 
