@@ -92,36 +92,3 @@ The network results:
 
 You can find the complete implementation in the [Fashion MNIST Tutorial Notebook](fashion_mnist_tutorial.ipynb).
 
-## Key Insights
-
-1. **Prediction vs Classification**
-   - PyAOgmaNeo turns classification into a prediction task
-   - Previous label provides context but doesn't influence final classification
-   - Random ordering ensures temporal independence
-
-2. **System Adaptation**
-   - We work with PyAOgmaNeo's temporal nature rather than against it
-   - Some computational overhead is accepted for architectural consistency
-   - Randomization effectively neutralizes unwanted temporal dependencies
-
-3. **Practical Benefits**
-   - Simple encoding scheme still achieves good results
-   - No need for complex image preprocessing
-   - Demonstrates PyAOgmaNeo's versatility
-
-## Usage Tips
-
-1. **Training**
-   - Use random image ordering
-   - Monitor moving average accuracy
-   - Save model checkpoints
-
-2. **Testing**
-   - Use 0 as previous label
-   - Evaluate per-class performance
-   - Test with specific examples for insight
-
-3. **Optimization**
-   - Adjust quantization levels
-   - Tune network architecture
-   - Experiment with learning parameters 

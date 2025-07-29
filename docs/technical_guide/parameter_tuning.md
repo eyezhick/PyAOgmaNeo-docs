@@ -13,27 +13,27 @@ Default parameter values for your particular build can be seen in the headers of
 ### IODesc
 Describes an input/output
 
-| Parameter | Description | Typical Value |
-|-----------|-------------|---------------|
-| `size` | Size (Int3) of the input/output layer (width, height, column_size) | - |
-| `type` | Enum type of the IO layer. Can be none (input only), prediction, and actor (RL) | - |
-| `num_dendrites_per_cell` | Number of dendrites attached to each output cell. Applies to decoders and actor policies | - |
-| `value_num_dendrites_per_cell` | Number of dendrites attached to each output cell specifically for actor value functions | - |
-| `up_radius` | Receptive field radius from this IO layer to the first layer (encoder radius) | Usually 2 |
-| `down_radius` | Receptive field radius from the first layer to this IO layer (decoder/actor radius) | Usually 2 |
-| `history_capacity` | (RL only) the credit assignment horizon | Usually 128 or 256 |
+| Parameter | Description |
+|-----------|-------------|
+| `size` | Size (Int3) of the input/output layer (width, height, column_size) |
+| `type` | Enum type of the IO layer. Can be none (input only), prediction, and actor (RL) |
+| `num_dendrites_per_cell` | Number of dendrites attached to each output cell. Applies to decoders and actor policies |
+| `value_num_dendrites_per_cell` | Number of dendrites attached to each output cell specifically for actor value functions |
+| `up_radius` | Receptive field radius from this IO layer to the first layer (encoder radius) |
+| `down_radius` | Receptive field radius from the first layer to this IO layer (decoder/actor radius) |
+| `history_capacity` | (RL only) the credit assignment horizon |
 
 ### LayerDesc
 Describes a higher (not IO) layer
 
-| Parameter | Description | Typical Value |
-|-----------|-------------|---------------|
-| `hidden_size` | Size (Int3) of the encoder's hidden state for that layer (width, height, column_size) | width/height: [4, 16]<br>column_size: [16, 64] |
-| `num_dendrites_per_cell` | Number of dendrites attached to each output cell in the decoder | - |
-| `up_radius` | Receptive field radius from previous (lower) layer to this layer (encoder radius) | Usually 2 |
-| `down_radius` | Receptive field radius from this layer to previous (lower) layer (decoder/actor radius) | Usually 2 |
-| `ticks_per_update` | Exponential Memory stride size | Usually 2 (doubling memory every layer) |
-| `temporal_horizon` | Memory window size of the layer, must be >= ticks_per_update | Usually 2 |
+| Parameter | Description |
+|-----------|-------------|
+| `hidden_size` | Size (Int3) of the encoder's hidden state for that layer (width, height, column_size) |
+| `num_dendrites_per_cell` | Number of dendrites attached to each output cell in the decoder |
+| `up_radius` | Receptive field radius from previous (lower) layer to this layer (encoder radius) |
+| `down_radius` | Receptive field radius from this layer to previous (lower) layer (decoder/actor radius) |
+| `ticks_per_update` | Exponential Memory stride size |
+| `temporal_horizon` | Memory window size of the layer, must be >= ticks_per_update |
 
 ## Runtime-adjustable Parameters
 
@@ -53,7 +53,7 @@ h.params.layers[4].decoder.scale = 64.0
 |-----------|-------------|
 | `decoder` | (DecoderParams) Decoder parameters |
 | `actor` | (ActorParams) Actor parameters |
-| `importance` | Importance scaling of this IO layer's input. Affects encoding, defaults to 1. Can be used to tweak the relative influences of the inputs, which can accelerate learning if properly adjusted |
+| `importance` | Importance scaling of this IO layer's input. Defaults to 1. Can be used to tweak the relative influences of the inputs, which can accelerate learning if properly adjusted |
 
 ### LayerParams
 | Parameter | Description |
@@ -90,22 +90,6 @@ Same as decoder, plus:
 | `value_clip` | Gradient clipping on the value function. Must be > 0.0 |
 | `trace_decay` | Decay multiplier for eligibility traces in [0.0, 1.0) |
 
-## Assorted Tips
-
-### Receptive Field Coverage
-Be aware of the receptive field coverage. The radii can be increased to increase coverage, at the cost of more compute. You can also add more layers to bridge spatial gaps in the receptive fields (higher level processing).
-
-### Default Values
-The defaults are likely fine for most tasks.
-
-### Learning Rate Adjustments
-Sometimes it is desirable to increase the actor `alr` parameter when in mimic mode, otherwise the smaller learning rate it has by default will make learning take forever (the default is made for RL).
-
-### Memory Efficiency
-Generally it is more efficient to use more layers than to increase `temporal_horizon` per-layer to get more memory.
-
-### Reward Handling
-On tasks with highly reward variance w.r.t. timesteps, you may want to decrease the discount factor. On the other end, if the task is quite continuous and rewards are sparse, you may want to increase the discount factor.
 
 ## See Also
 - [Variable Naming Reference](../appendix/naming_reference.md)
