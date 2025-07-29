@@ -44,6 +44,36 @@ h.step([state], learn_enabled=True, reward=reward)
 h.step([observation], learn_enabled=True, mimic=target)
 ```
 
+#### How `step()` Works
+
+The `step()` method is the core of PyAOgmaNeo - it processes inputs, updates internal state, and optionally learns from prediction errors.
+
+**Core Process:**
+1. **Input Processing**: Accepts one array per IO layer in order
+2. **State Update**: Updates network's temporal context
+3. **Learning**: If enabled, adjusts weights based on prediction errors
+4. **Signal Processing**: Applies reward/imitation signals for specialized learning
+
+**Input Requirements:**
+- **Exact Count**: Must provide `len(input_cis) == h.get_num_io()` arrays
+- **Correct Shape**: Each array shape must match `(layer.x * layer.y,)`
+- **Valid Range**: Values must be in `[0, layer.z-1]` (discrete indices)
+
+**Usage Patterns:**
+
+| Pattern | Configuration | Usage | Purpose |
+|---------|---------------|-------|---------|
+| **Autoregressive** | Single `prediction` layer | `h.step([[item]], True)` | Sequence modeling (same data type in/out) |
+| **Input-Output Separation** | `none` + `prediction` | `h.step([input, prev_output], True)` | Different input/output types |
+| **Reinforcement Learning** | `none` + `action` | `h.step([state, prev_action], True, reward=r)` | State-action learning |
+| **Inference** | Any configuration | `h.step(inputs, False)` | Deployment/evaluation |
+
+**Key Principles:**
+- **Prediction First**: Always get predictions before stepping (especially in RL)
+- **Previous Outputs as Inputs**: Feed previous predictions back as inputs for multi-layer configs
+- **Temporal Order**: Process sequences in chronological order
+- **State Management**: Use `clear_state()` between unrelated sequences/episodes
+
 ### Predictions
 
 ```python
@@ -62,32 +92,45 @@ hidden_preds = h.get_layer_prediction_cis(layer_idx)
 
 #### Understanding get_prediction_cis Return Value
 
-`get_prediction_cis(layer_idx)` returns a list containing one numpy array with the predictions for the specified IO layer. The layer_idx parameter refers to the index of the IO layer (not counting hidden layers). For example:
+`get_prediction_cis(layer_idx)` returns a list of integers with the predictions for the specified IO layer. The number of integers corresponds to the spatial structure of the IO layer - for a layer with dimensions `(x, y, z)`, you get `x * y` prediction integers (one per spatial location/CSDR). The layer_idx parameter refers to the index of the IO layer (not counting hidden layers).
 
 ```python
-# For a hierarchy with multiple IO layers:
+# For a single-location output (1x1 spatial):
 h = neo.Hierarchy([
-    neo.IODesc((28, 28, 4), io_type=neo.none),       # IO layer 0
-    neo.IODesc((1, 1, 10), io_type=neo.prediction)   # IO layer 1
+    neo.IODesc((1, 1, 10), io_type=neo.prediction)   # IO layer 0: 1 spatial location
 ], [
-    neo.LayerDesc((16, 16, 64))                      # Hidden layer (not counted in IO indexing)
+    neo.LayerDesc((16, 16, 64))
 ])
 
-# Get predictions from the second IO layer (index 1)
-predictions = h.get_prediction_cis(1)[0]  # [0] gets the first and only prediction array
+predictions = h.get_prediction_cis(0)[0]  # [0] gets the first (and only) CSDR
 
-# For a hierarchy with a single IO layer:
+# For image output (28x28 spatial):
 h = neo.Hierarchy([
-    neo.IODesc((1, 1, num_words), io_type=neo.prediction)  # IO layer 0
+    neo.IODesc((28, 28, 4), io_type=neo.prediction)  # IO layer 0: 784 spatial locations
 ], [
-    neo.LayerDesc(hidden_size)                             # Hidden layer
+    neo.LayerDesc((16, 16, 64))
 ])
 
-# Get predictions from the only IO layer (index 0)
-predictions = h.get_prediction_cis(0)[0]  # [0] gets the first and only prediction array
+predictions = h.get_prediction_cis(0)     # Returns list of 784 integers (28*28)
+first_pixel = predictions[0]              # Prediction for pixel (0,0)  
+pixel_100 = predictions[99]               # Prediction for pixel at index 99
+all_pixels = predictions                  # All 784 pixel predictions
+
+# For multi-layer with different spatial structures:
+h = neo.Hierarchy([
+    neo.IODesc((28, 28, 4), io_type=neo.none),       # IO layer 0: 784 locations
+    neo.IODesc((1, 1, 10), io_type=neo.prediction)   # IO layer 1: 1 location
+], [
+    neo.LayerDesc((16, 16, 64))
+])
+
+# Get predictions from the classification layer (single location)
+class_prediction = h.get_prediction_cis(1)[0]        # [0] gets the only CSDR
+# Get predictions from the image layer (multiple locations) 
+image_predictions = h.get_prediction_cis(0)          # List of 784 integers
 ```
 
-The `[0]` indexing is always needed because the method returns a list containing one prediction array, regardless of how many IO layers the hierarchy has.
+The indexing `[0]` gets the first CSDR (Column State Data Representation) prediction as an integer class index, but there may be many more depending on the spatial dimensions of the IO layer.
 
 ### State Access
 

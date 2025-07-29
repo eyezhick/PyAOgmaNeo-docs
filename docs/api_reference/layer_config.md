@@ -60,6 +60,35 @@ IO layers can function in two configurations:
 
 *`none` layers cannot exist alone as they provide no output mechanism.
 
+#### Data Flow Architecture
+
+**Multi-Layer Data Flow:**
+```
+Input Data → none layers ↘
+                         Hidden Layers → prediction/action layers → Outputs
+Previous Outputs → prediction/action layers ↗
+```
+
+**Key Principles:**
+- **All IO layers receive input** during `step()` - one array per layer in order
+- **Only `prediction`/`action` layers generate outputs** via `get_prediction_cis()`
+- **Hidden layers connect inputs to outputs** and process temporal patterns
+- **Previous outputs typically feed back** as inputs to maintain temporal consistency
+
+**Multi-Input Example:**
+```python
+# 2 inputs + 1 output
+h = neo.Hierarchy([
+    neo.IODesc((16, 16, 8), io_type=neo.none),     # Visual input
+    neo.IODesc((1, 1, 100), io_type=neo.none),     # Text input
+    neo.IODesc((1, 1, 10), io_type=neo.prediction) # Combined output
+], [hidden_layers])
+
+# Usage: provide input for ALL layers
+h.step([visual_data, text_data, prev_output], learn_enabled=True)
+prediction = h.get_prediction_cis(2)[0]  # Only from prediction layer
+```
+
 ### Example Configurations
 
 #### Single Layer Examples

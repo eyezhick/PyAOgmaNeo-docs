@@ -33,6 +33,19 @@ for _ in range(1000):
     prediction = h.get_prediction_cis(1)
 ```
 
+## Architecture Overview
+
+PyAOgmaNeo hierarchies consist of **IO layers** and **hidden layers**:
+
+- **IO Layers**: Interface with external data
+  - `none`: Input-only layers (sensors, data sources)
+  - `prediction`: Output layers for predictions/classifications  
+  - `action`: Output layers for reinforcement learning
+- **Hidden Layers**: Process and connect IO layers internally
+
+**Data Flow**: Input data flows through `none` layers → hidden layers → `prediction`/`action` layers → outputs. All IO layers receive input during `step()`, but only `prediction`/`action` layers generate outputs via `get_prediction_cis()`.
+
+
 ## Core Components
 
 ### [Hierarchy](hierarchy.md)
