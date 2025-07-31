@@ -330,17 +330,6 @@ def load_latest_checkpoint(base_path):
 - **Implement rotation**: Keep only the N most recent checkpoints to manage storage
 - **Test recovery**: Regularly verify that your checkpoints can be loaded successfully
 
-## Common Pitfalls
-
-### State Management Mistakes
-- **Not clearing state between sequences**: Can cause the model to treat separate sequences as continuous
-- **Clearing state during sequences**: Breaks temporal learning within sequences
-- **Ignoring state size**: Can lead to memory issues in large-scale applications
-
-### Persistence Issues
-- **Saving only weights**: Losing current state when you need it for continuation
-- **Not saving metadata**: Making it hard to track experiments and model versions
-- **Inconsistent saving**: Not saving frequently enough, risking loss of training progress
 
 ## See Also
 

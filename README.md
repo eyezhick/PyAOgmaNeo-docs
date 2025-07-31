@@ -11,6 +11,7 @@
   <p>
     <a href="https://github.com/ogmacorp/PyAOgmaNeo">PyAOgmaNeo</a> •
     <a href="https://github.com/ogmacorp/AOgmaNeo">AOgmaNeo</a> •
+    <a href="https://github.com/ogmacorp/CLOgmaNeo">CLOgmaNeo</a> •
     <a href="docs/getting_started/installation.md">Installation</a> •
     <a href="docs/getting_started/quickstart.md">Quickstart</a> •
     <a href="docs/examples">Examples</a>
