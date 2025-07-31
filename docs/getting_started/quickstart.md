@@ -36,30 +36,8 @@ Let's start with a simple **word prediction** task using a small English text da
 import pyaogmaneo as neo
 
 # Sample text for demonstration - about SPH and this example
-text = """Sparse Predictive Hierarchies are a neuromorphic machine learning architecture inspired by biological neural networks. 
-Unlike traditional neural networks SPH learns online with no separate training phase. 
-The system predicts temporal sequences naturally using sparse representations for efficiency. 
-
-This example demonstrates word prediction using PyAOgmaNeo. 
-The model learns to predict the current word based on its context. 
-The hierarchy maintains an internal state that updates as it processes each word. 
-
-Before processing each word the model makes a prediction. 
-The prediction is compared with the actual current word. 
-The model is then updated with the actual word. 
-This process repeats for each word in the sequence. 
-
-The network uses sparse predictive coding with configurable hidden layer size. 
-Online learning means the system adapts continuously without batch training. 
-Hierarchical processing resembles biological neural networks with multiple layers. 
-Sparse activations mean only some cells are active like real neurons. 
-
-The learning loop follows a simple pattern of predict then update. 
-This approach enables real-time adaptation as new data arrives. 
-Memory efficiency comes from not storing large training sets. 
-The system processes streaming data one sample at a time. 
-. 
-"""
+with open("sample_text_sph.txt", "r", encoding="utf-8") as f:
+    text = f.read()
 
 words = text.split()
 word_to_idx = {word: i for i, word in enumerate(set(words))}
@@ -71,42 +49,42 @@ print(f"Vocabulary: {vocab_size} words")
 # Create model with longer memory
 h = neo.Hierarchy([
     neo.IODesc(
-        (1, 1, vocab_size), 
+        (1, 1, vocab_size),
         io_type=neo.prediction,
-        history_capacity=512,        # Longer history buffer
         num_dendrites_per_cell=16    # More connections per cell
     )
 ], [
-    neo.LayerDesc((8, 8, 64)),      # Larger hidden layer
-    neo.LayerDesc((6, 6, 48))       # Additional layer for longer dependencies
+    neo.LayerDesc((8, 8, 64))
 ])
 
-# Train: predict current word, then update
-print("Training...")
+# predict current word, then update
 correct = 0
-for i, word in enumerate(words):
-    word_idx = word_to_idx[word] 
-    # Update with actual word
-    h.step([[word_idx]], True)
+for epoch in range(4):
+    for i, word in enumerate(words):
+        pred_idx = h.get_prediction_cis(0)[0]
+        predicted_word = idx_to_word[pred_idx]
+        word_idx = word_to_idx[word]
+        h.step([[word_idx]], learn_enabled=True)
 
-# Generate text
+        # Check correctness
+        if predicted_word == word:
+            color = "\033[32m"  # Green
+        else:
+            color = "\033[31m"  # Red
+        reset = "\033[0m"
+
+        print(f"{color}{predicted_word}{reset}", end=" ")
+        if i % 25 == 24:
+            print()
+    print("\n")
+
 h.clear_state()
-generated = ["Sparse"]
-
-# Feed starting word and generate next 10 words
-h.step([[word_to_idx["Sparse"]]], True)
-for _ in range(50):
-    pred_idx = h.get_prediction_cis(0)[0]
-    word = idx_to_word[pred_idx]
-    generated.append(word)
-    h.step([[pred_idx]], True)
-
-print(f"Generated: {' '.join(generated)}")
 ```
 
-**Expected Results**: You should see accuracy improve as the model learns word patterns and generates coherent text.
 
-> **Want more details?** Check out our comprehensive [Word Prediction Notebook](../examples/nlp/word_prediction_v2.ipynb) with detailed analysis, visualization, and advanced techniques.
+**Expected Results**: You should see the training accuracy improve over time. Initally it gets every word wrong, but by 4th run the model effectively memorizes the whole text.
+
+> **Want more details?** Check out our comprehensive [Word Prediction Notebook](../examples/nlp/word_prediction_v2.ipynb) with detailed analysis and visualization.
 
 ## Core Concepts
 
@@ -119,8 +97,8 @@ PyAOgmaNeo networks consist of **IO layers** and **hidden layers**:
 ```python
 h = neo.Hierarchy([
     # IO Layers - interface with external data
-    neo.IODesc((width, height, features), io_type=neo.none),      # Input-only
-    neo.IODesc((1, 1, classes), io_type=neo.prediction)          # Output layer
+    neo.IODesc((width, height, features), io_type=neo.none),    # Input-only
+    neo.IODesc((1, 1, classes), io_type=neo.prediction)     # Input and Output
 ], [
     # Hidden Layers - process and connect IO layers
     neo.LayerDesc((hidden_width, hidden_height, hidden_features))
@@ -210,7 +188,7 @@ h = neo.Hierarchy(io_layers, [
 ])
 
 print("Training online wine classifier...")
-print("Learning to distinguish wine classes from chemical analysis")
+print("Green = correct prediction, Red = incorrect")
 print()
 
 # Create shuffled indices for realistic online learning
@@ -219,51 +197,46 @@ train_size = int(0.8 * len(X))
 train_indices = indices[:train_size]
 test_indices = indices[train_size:]
 
-correct = 0
-total = 0
-
-print("Chemical Features | Predicted | Actual | ✓/✗ | Accuracy")
-print("-" * 60)
-
-# Online training
-for i, idx in enumerate(train_indices):
-    features = X_discrete[idx]
-    selected_features = features[important_features]
-    true_class = y[idx]
-    
-    # Get prediction
-    pred_class = h.get_prediction_cis(n_features)[0]
-    
-    # Check accuracy
-    is_correct = (pred_class == true_class)
-    correct += is_correct
-    total += 1
-    
-    # Show progress
-    if i % 15 == 0:
-        accuracy = correct / total if total > 0 else 0
-        pred_name = class_names[pred_class] if pred_class < 3 else "Unknown"
-        true_name = class_names[true_class]
+# Online training - show predictions in real-time
+for epoch in range(3):
+    print(f"Epoch {epoch + 1}: ", end="")
+    for i, idx in enumerate(train_indices[:50]):  # Show first 50 for clarity
+        features = X_discrete[idx]
+        selected_features = features[important_features]
+        true_class = y[idx]
         
-        feature_str = f"[{','.join(map(str, selected_features[:3]))}...]"
-        print(f"{feature_str:17} | {pred_name:9} | {true_name:9} | {'✓' if is_correct else '✗'} | {accuracy:.3f}")
-    
-    # Update network with current wine's features
-    inputs = [[int(f)] for f in selected_features] + [[true_class]]
-    h.step(inputs, learn_enabled=True)
+        # Get prediction
+        pred_class = h.get_prediction_cis(n_features)[0]
+        
+        # Update network with current wine's features
+        inputs = [[int(f)] for f in selected_features] + [[true_class]]
+        h.step(inputs, learn_enabled=True)
+        
+        # Color code prediction
+        if pred_class == true_class:
+            color = "\033[32m"  # Green
+        else:
+            color = "\033[31m"  # Red
+        reset = "\033[0m"
+        
+        pred_name = class_names[pred_class] if pred_class < 3 else "?"
+        print(f"{color}{pred_name[0]}{reset}", end="")  # Just first letter
+    print()  # New line after each epoch
 
-train_accuracy = correct / total
-print(f"\nTraining accuracy: {train_accuracy:.3f}")
+print("\nTraining complete! (C=class_0, P=class_1, B=class_2)")
 print()
 
+```
+
+Now let's test the trained model on new wines:
+
+```python
 # Test on held-out wines
 print("Testing on unseen wines...")
+print("Test results: ", end="")
+
 test_correct = 0
-
-print("Chemical Features | Predicted | Actual | Result")
-print("-" * 50)
-
-for idx in test_indices[:15]:  # Show first 15 test cases
+for idx in test_indices[:30]:  # Test on 30 unseen wines
     features = X_discrete[idx]
     selected_features = features[important_features]
     true_class = y[idx]
@@ -276,16 +249,19 @@ for idx in test_indices[:15]:  # Show first 15 test cases
     is_correct = (pred_class == true_class)
     test_correct += is_correct
     
-    # Show results
-    pred_name = class_names[pred_class] if pred_class < 3 else "Unknown"
-    true_name = class_names[true_class]
-    feature_str = f"[{','.join(map(str, selected_features[:3]))}...]"
+    # Color code results
+    if is_correct:
+        color = "\033[32m"  # Green
+    else:
+        color = "\033[31m"  # Red
+    reset = "\033[0m"
     
-    print(f"{feature_str:17} | {pred_name:9} | {true_name:9} | {'✓' if is_correct else '✗'}")
+    pred_name = class_names[pred_class] if pred_class < 3 else "?"
+    print(f"{color}{pred_name[0]}{reset}", end="")
 
-test_accuracy = test_correct / len(test_indices)
-print(f"\nTest accuracy: {test_accuracy:.3f}")
-print("The network learned to classify wines from chemical measurements.")
+test_accuracy = test_correct / 30
+print(f"\n\nTest accuracy: {test_accuracy:.3f}")
+print("The network learned to classify wines from chemical measurements!")
 ```
 
 **What's remarkable:** The network learned to distinguish wine classes based on chemical analysis - the same problem wine experts solve, but using only discrete measurements and online learning.
