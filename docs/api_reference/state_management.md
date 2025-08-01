@@ -101,122 +101,40 @@ h.set_weights_from_buffer(weights_buffer)  # Load just weights
 - **Memory optimization**: Only save what you need
 - **Experimental workflows**: Mix and match different components
 
-## Usage Patterns
+## Usage Examples
 
-### Training Mode
+> **Complete Workflows:** For comprehensive usage patterns including training workflows, sequence processing, and reinforcement learning, see the [Usage Patterns Guide](../user_guide/usage_patterns.md).
 
-During training, the network learns from the data and updates its weights:
+### Basic State Management Example
 
 ```python
-# Basic training - network learns from input patterns
+import pyaogmaneo as neo
+
+# Create hierarchy
+h = neo.Hierarchy(io_descs, layer_descs)
+
+# Check memory usage
+print(f"State size: {h.get_state_size()} bytes")
+print(f"Weights size: {h.get_weights_size()} bytes")
+
+# Process some data
 h.step(inputs, learn_enabled=True)
 
-# With reward signal (for RL) - network learns from environmental feedback
-h.step([state, prev_action], learn_enabled=True, reward=reward)
+# Save current state
+state_buffer = h.serialize_state_to_buffer()
 
-# With imitation - network learns to mimic target behavior
-h.step(observation, learn_enabled=True, mimic=target)
+# Clear state for new sequence
+h.clear_state()
+
+# Process new sequence
+h.step(new_inputs, learn_enabled=True)
+
+# Restore previous state if needed
+h.set_state_from_buffer(state_buffer)
+
+# Save complete model
+h.save_to_file("model.ohr")
 ```
-
-**Key points about training mode:**
-- `learn_enabled=True` allows weight updates
-- Rewards guide learning in reinforcement learning scenarios
-- Imitation learning helps bootstrap from expert demonstrations
-
-### Inference Mode
-
-During inference, you get predictions without modifying the learned weights:
-
-```python
-# Disable learning, just get predictions
-h.step(inputs, learn_enabled=False)
-
-# Get predictions
-prediction = h.get_prediction_cis(layer_idx)[0]  # [0] gets the first prediction array
-probabilities = h.get_prediction_acts(layer_idx)  # Get raw prediction probabilities
-```
-
-**Key points about inference mode:**
-- `learn_enabled=False` prevents weight changes
-- State still updates to maintain temporal context
-- Multiple prediction formats available for different use cases
-
-### Sequence Processing
-
-Proper sequence handling is crucial for temporal learning:
-
-```python
-# Reset state for new sequence
-h.clear_state()  # Important: breaks temporal connection to previous sequence
-
-# Process sequence
-for item in sequence:
-    h.step([item], learn_enabled=True)
-    prediction = h.get_prediction_cis(0)[0]  # Get prediction for current item
-    
-# Generate continuation (creative mode)
-for _ in range(length):
-    pred = h.get_prediction_cis(0)[0]
-    h.step([pred], learn_enabled=False)  # Use own predictions as input
-```
-
-**Sequence processing best practices:**
-- Always clear state between unrelated sequences
-- Process sequences in temporal order
-- Use predictions as input for generation tasks
-- Consider whether to enable learning during generation
-
-### Reinforcement Learning
-
-RL requires careful coordination between the hierarchy and environment:
-
-```python
-# Import environment library (e.g., Gymnasium, formerly OpenAI Gym)
-import gymnasium as gym
-
-# Create environment
-env = gym.make('CartPole-v1')  # Or any other RL environment
-
-# Create hierarchy matching environment specifications
-h = neo.Hierarchy([
-    # State input layer - matches environment observation space
-    neo.IODesc(size=(1, 1, env.observation_space.shape[0]),
-              io_type=neo.none),
-    # Action output layer - matches environment action space
-    neo.IODesc(size=(1, 1, env.action_space.n),
-              io_type=neo.action)
-], [
-    neo.LayerDesc((4, 4, 32))  # Hidden layer for processing
-])
-
-# Episode start
-h.clear_state()  # Each episode starts fresh
-state, _ = env.reset()  # Get initial environment state
-prev_action = [0]  # Initial action (no action taken yet)
-
-# Training loop
-while not done:
-    # Get action from hierarchy
-    action = h.get_prediction_cis(1)[0]  # Action layer is at index 1
-    
-    # Environment step
-    next_state, reward, done, truncated, info = env.step(action)
-    
-    # Update hierarchy with reward feedback
-    h.step([state, prev_action], learn_enabled=True, reward=reward)
-    
-    # Update for next iteration
-    state = next_state
-    prev_action = action
-
-env.close()
-```
-
-**RL-specific considerations:**
-- State and action must be provided to the hierarchy
-- Rewards guide the learning process
-- Each episode should start with cleared state
-- Action layer uses `io_type=neo.action` for proper RL handling
 
 ## State Checkpointing
 
@@ -310,29 +228,9 @@ def load_latest_checkpoint(base_path):
     return h, metadata
 ```
 
-## Best Practices
-
-### State Management Guidelines
-- **Clear state appropriately**: Use `clear_state()` between unrelated sequences or episodes, but not during continuous processing
-- **Understand the distinction**: Internal state is temporal context; weights are learned knowledge
-- **Plan your persistence strategy**: Save weights frequently during training, full models for deployment
-- **Use component-wise loading**: When you only need specific parts or for transfer learning scenarios
-
-### Memory Efficiency Considerations
-- **Monitor sizes**: Check `get_state_size()` and `get_weights_size()` to understand memory usage
-- **Component-wise saving**: Save only what you need to reduce storage requirements
-- **Compression**: Consider compressing state buffers for long-term storage
-- **Cleanup**: Remove old checkpoints to manage disk space
-
-### Checkpointing Strategies
-- **Include metadata**: Save training metrics, timestamps, and model architecture information
-- **Version your checkpoints**: Use epoch numbers or timestamps in checkpoint names
-- **Implement rotation**: Keep only the N most recent checkpoints to manage storage
-- **Test recovery**: Regularly verify that your checkpoints can be loaded successfully
-
-
 ## See Also
 
+- [Usage Patterns Guide](../user_guide/usage_patterns.md) - Common workflows and usage patterns
 - [Hierarchy Class](hierarchy.md) - Core hierarchy functionality and methods
 - [Layer Configuration](layer_config.md) - Setting up layers and their parameters
 - [Image Processing](image_encoder.md) - Specialized processing for image data 

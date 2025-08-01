@@ -53,14 +53,11 @@ pip install .
 
 ## Verification
 
-To verify your installation:
-
-```python
-import pyaogmaneo as neo
-print(neo.__version__)  # Should print the current version
-```
+TODO
 
 ## Troubleshooting
+
+TODO
 
 Common installation issues and their solutions will be documented here.
 

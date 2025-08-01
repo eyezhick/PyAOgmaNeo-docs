@@ -34,6 +34,7 @@
 |------|--------------|
 | Quick start guide | [Quickstart Guide](docs/getting_started/quickstart.md) |
 | Learn fundamentals | [Basic Concepts](docs/getting_started/basic_concepts.md) |
+| Common workflows | [Usage Patterns](docs/user_guide/usage_patterns.md) |
 | Browse examples | [Examples](docs/examples) |
 | Understand internals | [Core Concepts](docs/user_guide/core_concepts.md) |
 | Follow tutorials | [Tutorials](docs/tutorials/basic/first_hierarchy.md) |
@@ -44,6 +45,7 @@
 
 | Date | Section | Description |
 |------|---------|-------------|
+| 2025-08-01 | [Usage Patterns](docs/user_guide/usage_patterns.md) | Comprehensive guide covering training workflows, sequence processing, and reinforcement learning patterns |
 | 2025-07-29 | [Quickstart Guide](docs/getting_started/quickstart.md) | Complete quickstart guide with runnable examples and core concepts |
 | 2025-07-23 | [API Reference](docs/api_reference/index.md) | Complete API documentation with verified methods and examples |
 | 2025-07-23 | [Layer Configuration](docs/api_reference/layer_config.md) | Comprehensive layer configuration guide with parameter validation |
@@ -70,6 +72,7 @@ This documentation is organized into several sections to help you find what you 
 
 - [Overview](docs/user_guide/overview.md) ⏳
 - [Core Concepts](docs/user_guide/core_concepts.md) ⏳
+- [Usage Patterns](docs/user_guide/usage_patterns.md) ✅
 - [EnvRunner Guide](docs/user_guide/env_runner.md) ⚠️
 - [Custom Environments](docs/user_guide/custom_environments.md) ⏳
 </details>
