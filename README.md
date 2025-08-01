@@ -6,7 +6,7 @@
 # PyAOgmaNeo Documentation
 
 <div align="center">
-  <img src="assets/logo.png" alt="PyAOgmaNeo Logo" width="400"/>
+  <img src="assets/OgmaLogoR.jpg" alt="PyAOgmaNeo Logo" width="400"/>
   <p><strong>Python bindings for the AOgmaNeo library</strong></p>
   <p>
     <a href="https://github.com/ogmacorp/PyAOgmaNeo">PyAOgmaNeo</a> •
