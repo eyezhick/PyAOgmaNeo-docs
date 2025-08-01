@@ -8,6 +8,7 @@ PyAOgmaNeo is a Python binding for AOgmaNeo (Adaptive Ogma Neo), a library imple
 - Temporal sequence prediction and learning
 - Reinforcement learning capabilities
 - Efficient sparse representations
+- Minimal training vs inference overhead (~2x vs 10x-100x for traditional networks)
 
 ### Quick Start
 

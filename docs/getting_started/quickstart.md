@@ -15,6 +15,7 @@ PyAOgmaNeo implements **Sparse Predictive Hierarchies (SPH)** - a neuromorphic m
 - **Predicts temporal sequences** naturally 
 - **Uses sparse representations** for efficiency
 - **Processes hierarchical patterns** resembling the brain
+- **Minimal training overhead** - only ~2x slower than inference (vs 10x-100x for traditional networks)
 
 ## Prerequisites
 

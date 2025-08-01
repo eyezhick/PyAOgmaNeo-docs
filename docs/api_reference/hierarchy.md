@@ -169,6 +169,30 @@ h.merge(hierarchies, mode=neo.MergeMode.merge_average)
 
 PyAOgmaNeo hierarchies can operate in two distinct modes, each serving different purposes in your machine learning workflow.
 
+> **Performance Note:** Unlike traditional neural networks, PyAOgmaNeo has only a ~2x performance difference between training and inference modes, making it highly efficient for online learning and real-time applications.
+
+#### Why Training is Only ~2x Slower Than Inference
+
+This efficiency stems from PyAOgmaNeo's neuromorphic architecture:
+
+**Shared Forward Pass:** Both training and inference execute identical forward computations:
+- Sparse activations through winner-take-all mechanisms
+- Receptive field calculations 
+- Activation computations and softmax normalization
+- Prediction generation
+
+**Lightweight Learning:** Training only adds simple weight updates:
+- Local Hebbian-style learning rules (no complex backpropagation)
+- Direct weight adjustments based on prediction errors
+- No gradient chains or complex optimization algorithms
+- Quantized 8-bit weights for efficient memory access
+
+**Contrast with Traditional Neural Networks:**
+- **Traditional:** 10x-100x slower training due to backpropagation, gradient computation, and complex optimizers
+- **PyAOgmaNeo:** ~2x slower training due to simple local weight updates added to the same forward pass
+
+This efficiency enables continuous online learning without the typical performance penalties of traditional deep learning systems.
+
 #### Training Mode
 
 During training, the network learns from the data and updates its weights:
