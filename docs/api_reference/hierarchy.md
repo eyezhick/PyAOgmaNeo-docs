@@ -163,9 +163,100 @@ field, size = h.get_encoder_receptive_field(
 h.merge(hierarchies, mode=neo.MergeMode.merge_average)
 ```
 
-## Example Usage
+## Usage Patterns and Examples
 
-### Classification
+### Training vs Inference Modes
+
+PyAOgmaNeo hierarchies can operate in two distinct modes, each serving different purposes in your machine learning workflow.
+
+#### Training Mode
+
+During training, the network learns from the data and updates its weights:
+
+```python
+# Basic training - network learns from input patterns
+h.step(inputs, learn_enabled=True)
+
+# With reward signal (for RL) - network learns from environmental feedback
+h.step([state, prev_action], learn_enabled=True, reward=reward)
+
+# With imitation - network learns to mimic target behavior
+h.step(observation, learn_enabled=True, mimic=target)
+```
+
+**Key points about training mode:**
+- `learn_enabled=True` allows weight updates
+- Rewards guide learning in reinforcement learning scenarios
+- Imitation learning helps bootstrap from expert demonstrations
+
+#### Inference Mode
+
+During inference, you get predictions without modifying the learned weights:
+
+```python
+# Disable learning, just get predictions
+h.step(inputs, learn_enabled=False)
+
+# Get predictions
+prediction = h.get_prediction_cis(layer_idx)[0]  # [0] gets the first prediction array
+probabilities = h.get_prediction_acts(layer_idx)  # Get raw prediction probabilities
+```
+
+**Key points about inference mode:**
+- `learn_enabled=False` prevents weight changes
+- State still updates to maintain temporal context
+- Multiple prediction formats available for different use cases
+
+### Sequence Processing
+
+Proper sequence handling is crucial for temporal learning. PyAOgmaNeo excels at learning temporal patterns when sequences are processed correctly.
+
+#### Basic Sequence Processing
+
+```python
+# Reset state for new sequence
+h.clear_state()  # Important: breaks temporal connection to previous sequence
+
+# Process sequence
+for item in sequence:
+    h.step([item], learn_enabled=True)
+    prediction = h.get_prediction_cis(0)[0]  # Get prediction for current item
+    
+# Generate continuation (creative mode)
+for _ in range(length):
+    pred = h.get_prediction_cis(0)[0]
+    h.step([pred], learn_enabled=False)  # Use own predictions as input
+```
+
+#### Sequence Processing Best Practices
+
+**Always clear state between unrelated sequences:**
+- Prevents the model from treating separate sequences as continuous
+- Ensures each sequence starts with a clean temporal context
+- Critical for proper learning of sequence boundaries
+
+**Process sequences in temporal order:**
+- PyAOgmaNeo learns temporal dependencies between consecutive items
+- Out-of-order processing breaks the temporal learning mechanism
+
+**Use predictions as input for generation tasks:**
+- The network can generate novel sequences by feeding its own predictions back as input
+- Consider whether to enable learning during generation based on your use case
+
+**When to clear state:**
+- Starting new sequences during training
+- Beginning inference on unrelated data
+- Switching between different types of sequences
+- Resetting temporal context for debugging
+
+**When NOT to clear state:**
+- During continuous sequences where temporal context is important
+- When you want the model to maintain memory across related inputs
+- During inference where context should be preserved
+
+### Application Examples
+
+#### Classification
 
 ```python
 # Create classification hierarchy
@@ -191,7 +282,7 @@ for epoch in range(num_epochs):
         prev_label = label
 ```
 
-### Sequence Prediction
+#### Sequence Prediction
 
 ```python
 # Create sequence prediction hierarchy
@@ -209,23 +300,131 @@ for sequence in sequences:
         prediction = h.get_prediction_cis(0)[0]  # Get prediction from only IO layer
 ```
 
-### Reinforcement Learning
+#### Reinforcement Learning Workflows
+
+Reinforcement learning with PyAOgmaNeo requires careful coordination between the hierarchy and the environment. Here's a complete workflow:
+
+##### Environment Setup
 
 ```python
-# Create RL hierarchy
+# Import environment library (e.g., Gymnasium, formerly OpenAI Gym)
+import gymnasium as gym
+
+# Create environment
+env = gym.make('CartPole-v1')  # Or any other RL environment
+
+# Create hierarchy matching environment specifications
 h = neo.Hierarchy([
-    neo.IODesc((8, 8, 16), neo.none),      # State
-    neo.IODesc((1, 1, num_actions), neo.action)  # Actions
+    # State input layer - matches environment observation space
+    neo.IODesc(size=(1, 1, env.observation_space.shape[0]),
+              io_type=neo.none),
+    # Action output layer - matches environment action space
+    neo.IODesc(size=(1, 1, env.action_space.n),
+              io_type=neo.action)
 ], [
-    neo.LayerDesc((6, 6, 32))
+    neo.LayerDesc((4, 4, 32))  # Hidden layer for processing
 ])
+```
+
+##### Training Loop
+
+```python
+# Episode start
+h.clear_state()  # Each episode starts fresh
+state, _ = env.reset()  # Get initial environment state
+prev_action = [0]  # Initial action (no action taken yet)
 
 # Training loop
-while training:
-    state = env.get_state()
-    action = h.get_prediction_cis(1)[0]  # Get prediction from second IO layer
-    reward = env.step(action)
-    h.step([state], True, reward=reward)
+while not done:
+    # Get action from hierarchy
+    action = h.get_prediction_cis(1)[0]  # Action layer is at index 1
+    
+    # Environment step
+    next_state, reward, done, truncated, info = env.step(action)
+    
+    # Update hierarchy with reward feedback
+    h.step([state, prev_action], learn_enabled=True, reward=reward)
+    
+    # Update for next iteration
+    state = next_state
+    prev_action = action
+
+env.close()
+```
+
+##### RL-Specific Considerations
+
+**State and Action Representation:**
+- Both current state and previous action must be provided to the hierarchy
+- This allows the network to learn state-action-reward relationships
+- Action layer uses `io_type=neo.action` for proper RL handling
+
+**Reward Integration:**
+- Rewards guide the learning process by reinforcing successful behaviors
+- The hierarchy learns to predict actions that lead to higher rewards
+- Reward signals should be consistent and meaningful
+
+**Episode Management:**
+- Each episode should start with cleared state using `h.clear_state()`
+- This prevents temporal bleeding between different episodes
+- Maintains proper episode boundaries for learning
+
+**Exploration vs Exploitation:**
+- The hierarchy naturally balances exploration and exploitation
+- Early in training, actions may be more random (exploration)
+- As learning progresses, actions become more deterministic (exploitation)
+
+### Advanced Patterns
+
+#### Transfer Learning
+
+Load pre-trained weights into a new model for transfer learning:
+
+```python
+# Load weights from a pre-trained model
+with open("pretrained_weights.bin", 'rb') as f:
+    weights_buffer = f.read()
+
+# Create new hierarchy and load weights
+h_new = neo.Hierarchy(io_descs, layer_descs)
+h_new.set_weights_from_buffer(weights_buffer)
+
+# Continue training on new task
+h_new.step(new_task_inputs, learn_enabled=True)
+```
+
+#### Multi-Task Learning
+
+Handle multiple related tasks by managing state appropriately:
+
+```python
+# Clear state when switching between tasks
+for task in tasks:
+    h.clear_state()  # Reset context for new task
+    
+    for data in task.data:
+        h.step(data, learn_enabled=True)
+        
+    # Evaluate on task
+    task.evaluate(h)
+```
+
+#### Debugging and Analysis
+
+Save intermediate states for debugging and analysis:
+
+```python
+# Save state at critical points
+debug_states = []
+for i, item in enumerate(sequence):
+    h.step([item], learn_enabled=True)
+    
+    if i % debug_interval == 0:
+        state_buffer = h.serialize_state_to_buffer()
+        debug_states.append((i, state_buffer))
+
+# Later: load specific state for analysis
+h.set_state_from_buffer(debug_states[checkpoint_idx][1])
 ```
 
 ## See Also

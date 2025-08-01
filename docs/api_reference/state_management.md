@@ -103,7 +103,7 @@ h.set_weights_from_buffer(weights_buffer)  # Load just weights
 
 ## Usage Examples
 
-> **Complete Workflows:** For comprehensive usage patterns including training workflows, sequence processing, and reinforcement learning, see the [Usage Patterns Guide](../user_guide/usage_patterns.md).
+> **Complete Workflows:** For comprehensive usage patterns including training workflows, sequence processing, and reinforcement learning, see the [Hierarchy Usage Patterns](hierarchy.md#usage-patterns-and-examples).
 
 ### Basic State Management Example
 
@@ -230,7 +230,7 @@ def load_latest_checkpoint(base_path):
 
 ## See Also
 
-- [Usage Patterns Guide](../user_guide/usage_patterns.md) - Common workflows and usage patterns
+- [Hierarchy Usage Patterns](hierarchy.md#usage-patterns-and-examples) - Common workflows and usage patterns
 - [Hierarchy Class](hierarchy.md) - Core hierarchy functionality and methods
 - [Layer Configuration](layer_config.md) - Setting up layers and their parameters
 - [Image Processing](image_encoder.md) - Specialized processing for image data 
